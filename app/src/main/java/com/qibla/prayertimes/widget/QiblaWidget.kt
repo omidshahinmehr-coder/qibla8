@@ -221,7 +221,7 @@ dateKey
 }
 
 private fun staticDuration(targetMillis: Long): String {
-val diff = (targetMillis - System.currentMillis()).coerceAtLeast(0) / 1000
+val diff = (targetMillis - System.currentTimeMillis()).coerceAtLeast(0) / 1000
 val h = diff / 3600
 val m = (diff % 3600) / 60
 val s = diff % 60
