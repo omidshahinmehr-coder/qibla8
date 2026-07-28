@@ -15,7 +15,7 @@
     <!-- Compass -->
     <string name="compass_locate_me">My current location</string>
     <string name="compass_add_from_map">Add from map</string>
-    <string name="compass_live_caption">Hold the phone flat and face forward until the arrow points up</string>
+    <string name="compass_live_caption"></string>
     <string name="compass_static_caption">From north, clockwise</string>
     <string name="compass_distance">Distance to the Kaaba: %1$d km</string>
     <string name="dir_n">N</string>
@@ -43,7 +43,7 @@
     <string name="prayer_sunset">Sunset</string>
     <string name="prayer_maghrib">Maghrib</string>
     <string name="prayer_isha">Isha</string>
-    <string name="prayer_midnight">Islamic Midnight</string>
+    <string name="prayer_midnight">Midnight</string>
     <string name="prayer_times_error">Getting prayer times failed, both online and offline.</string>
 
     <!-- City picker -->
