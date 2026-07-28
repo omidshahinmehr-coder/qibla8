@@ -78,12 +78,14 @@ val countdown = nextPrayerCountdown(snapshot.timings)
 val weekdayName = weekdayName(language)
 val gregorianText = formatGregorian(langContext, snapshot.gregorianDateKey)
 
+// ⭐ ساعت زنده (RemoteViews)
 AndroidRemoteViews(
 RemoteViews(langContext.packageName, R.layout.widget_clock)
 )
 
 Spacer(modifier = GlanceModifier.height(6.dp))
 
+// ⭐ تاریخ شمسی
 Text(
 text = "{snapshot.jalaliText}",
 style = TextStyle(
@@ -95,6 +97,7 @@ textAlign = TextAlign.Center
 modifier = GlanceModifier.fillMaxWidth()
 )
 
+// ⭐ تاریخ قمری — میلادی
 Text(
 text = "gregorianText",
 style = TextStyle(
@@ -107,6 +110,7 @@ modifier = GlanceModifier.fillMaxWidth()
 
 Spacer(modifier = GlanceModifier.height(6.dp))
 
+// ⭐ شمارش معکوس
 if (countdown != null) {
 
 Text(
@@ -126,6 +130,7 @@ modifier = GlanceModifier.fillMaxWidth()
 
 Spacer(modifier = GlanceModifier.height(4.dp))
 
+// ⭐ تایمر زنده (Chronometer)
 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
 val nowElapsed = SystemClock.elapsedRealtime()
 val nowWall = System.currentTimeMillis()
@@ -152,6 +157,7 @@ modifier = GlanceModifier.fillMaxWidth()
 
 Spacer(modifier = GlanceModifier.height(10.dp))
 
+// ⭐ جدول پایین
 Row(
 modifier = GlanceModifier.fillMaxWidth(),
 horizontalAlignment = Alignment.Horizontal.CenterHorizontally
