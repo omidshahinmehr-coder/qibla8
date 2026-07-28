@@ -53,12 +53,10 @@ val labels = prayerLabels(langContext)
 val language = langContext.resources.configuration.locales[0].language
 val isRtl = language == "fa" || language == "ar"
 
-// حالت سیستم (روشن/تاریک)
 val isDarkMode =
 (langContext.resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK) ==
 Configuration.UI_MODE_NIGHT_YES
 
-// رنگ‌های دوحالته
 val bgColor = ColorProvider(if (isDarkMode) Color(0xFF3E2F1C) else Color(0xFFF3ECDD))
 val cellBorderColor = ColorProvider(if (isDarkMode) Color(0xFF5A4730) else Color(0xFFD9C8A0))
 val cellFillColor = ColorProvider(if (isDarkMode) Color(0xFF4A3A24) else Color(0xFFFBF6EA))
@@ -80,31 +78,35 @@ val countdown = nextPrayerCountdown(snapshot.timings)
 val weekdayName = weekdayName(language)
 val gregorianText = formatGregorian(langContext, snapshot.gregorianDateKey)
 
-// ⭐ ساعت بالا (RemoteViews)
 AndroidRemoteViews(
 RemoteViews(langContext.packageName, R.layout.widget_clock)
 )
 
 Spacer(modifier = GlanceModifier.height(6.dp))
 
-// ⭐ تاریخ‌ها (جلالی + قمری + میلادی)
 Text(
 text = "{snapshot.jalaliText}",
-style = TextStyle(color = goldText, fontSize = 14.sp, fontWeight = FontWeight.Bold),
-textAlign = TextAlign.Center,
+style = TextStyle(
+color = goldText,
+fontSize = 14.sp,
+fontWeight = FontWeight.Bold,
+textAlign = TextAlign.Center
+),
 modifier = GlanceModifier.fillMaxWidth()
 )
 
 Text(
 text = "gregorianText",
-style = TextStyle(color = faintGoldText, fontSize = 12.sp),
-textAlign = TextAlign.Center,
+style = TextStyle(
+color = faintGoldText,
+fontSize = 12.sp,
+textAlign = TextAlign.Center
+),
 modifier = GlanceModifier.fillMaxWidth()
 )
 
 Spacer(modifier = GlanceModifier.height(6.dp))
 
-// ⭐ شمارش معکوس
 if (countdown != null) {
 
 Text(
@@ -124,7 +126,6 @@ modifier = GlanceModifier.fillMaxWidth()
 
 Spacer(modifier = GlanceModifier.height(4.dp))
 
-// ⭐ تایمر زنده (RemoteViews)
 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
 val nowElapsed = SystemClock.elapsedRealtime()
 val nowWall = System.currentTimeMillis()
@@ -151,7 +152,6 @@ modifier = GlanceModifier.fillMaxWidth()
 
 Spacer(modifier = GlanceModifier.height(10.dp))
 
-// ⭐ جدول پایین (اوقات شرعی)
 Row(
 modifier = GlanceModifier.fillMaxWidth(),
 horizontalAlignment = Alignment.Horizontal.CenterHorizontally
@@ -199,12 +199,22 @@ horizontalAlignment = Alignment.Horizontal.CenterHorizontally
 ) {
 Text(
 text = label,
-style = TextStyle(color = goldText, fontSize = 10.sp, fontWeight = FontWeight.Bold)
+style = TextStyle(
+color = goldText,
+fontSize = 10.sp,
+fontWeight = FontWeight.Bold,
+textAlign = TextAlign.Center
+)
 )
 Spacer(modifier = GlanceModifier.height(2.dp))
 Text(
 text = time,
-style = TextStyle(color = goldText, fontSize = 14.sp, fontWeight = FontWeight.Bold)
+style = TextStyle(
+color = goldText,
+fontSize = 14.sp,
+fontWeight = FontWeight.Bold,
+textAlign = TextAlign.Center
+)
 )
 }
 }
