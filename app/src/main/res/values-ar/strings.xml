@@ -13,18 +13,18 @@
 
     <string name="compass_locate_me">موقعي الحالي</string>
     <string name="compass_add_from_map">إضافة من الخريطة</string>
-    <string name="compass_live_caption">أمسك الهاتف واتجه للأمام حتى يشير السهم للأعلى</string>
+    <string name="compass_live_caption"></string>
     <string name="compass_static_caption">من الشمال، باتجاه عقارب الساعة</string>
     <string name="compass_distance">المسافة إلى الكعبة: %1$d كم</string>
-    <string name="dir_n">ش</string>
-    <string name="dir_ne">ش.ق</string>
-    <string name="dir_e">ق</string>
-    <string name="dir_se">ج.ق</string>
-    <string name="dir_s">ج</string>
-    <string name="dir_sw">ج.غ</string>
-    <string name="dir_w">غ</string>
-    <string name="dir_nw">ش.غ</string>
-
+      <string name="dir_n">N</string>
+    <string name="dir_ne">NE</string>
+    <string name="dir_e">E</string>
+    <string name="dir_se">SE</string>
+    <string name="dir_s">S</string>
+    <string name="dir_sw">SW</string>
+    <string name="dir_w">W</string>
+    <string name="dir_nw">NW</string>
+    
     <string name="prayer_times_title">مواقيت الصلاة اليوم</string>
     <string name="offline_approx_badge">غير متصل · تقريبي</string>
     <string name="approx_suffix"> (تقريبي)</string>
