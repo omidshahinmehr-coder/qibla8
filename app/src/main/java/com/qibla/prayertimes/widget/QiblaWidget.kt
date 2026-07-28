@@ -1,6 +1,7 @@
 package com.qibla.prayertimes.widget
 
 import android.content.Context
+import android.content.res.Configuration
 import android.os.Build
 import android.os.SystemClock
 import android.widget.RemoteViews
@@ -8,13 +9,15 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.glance.*
+import androidx.glance.GlanceId
+import androidx.glance.GlanceModifier
 import androidx.glance.action.actionStartActivity
 import androidx.glance.action.clickable
 import androidx.glance.appwidget.AndroidRemoteViews
 import androidx.glance.appwidget.GlanceAppWidget
 import androidx.glance.appwidget.cornerRadius
 import androidx.glance.appwidget.provideContent
+import androidx.glance.background
 import androidx.glance.layout.*
 import androidx.glance.text.*
 import androidx.glance.unit.ColorProvider
@@ -45,6 +48,10 @@ private val darkFaintGold = ColorProvider(Color(0xFFBFA86A))
 private val widgetPrayerKeys = listOf("Fajr", "Sunrise", "Dhuhr", "Sunset", "Maghrib", "Midnight")
 private val cellWidth = 66.dp
 
+/* ------------------------- WEEKDAY ARRAYS ------------------------- */
+private val WEEKDAYS_FA = arrayOf("یکشنبه", "دوشنبه", "سه‌شنبه", "چهارشنبه", "پنجشنبه", "جمعه", "شنبه")
+private val WEEKDAYS_AR = arrayOf("الأحد", "الاثنين", "الثلاثاء", "الأربعاء", "الخميس", "الجمعة", "السبت")
+
 class QiblaWidget : GlanceAppWidget() {
 override suspend fun provideGlance(context: Context, id: GlanceId) {
 val localizedContext = LocalePrefs.wrap(context)
@@ -59,7 +66,12 @@ WidgetContent(localizedContext, snapshot)
 private fun WidgetContent(langContext: Context, snapshot: WidgetSnapshot?) {
 
 val labels = prayerLabels(langContext)
-val isDark = GlanceTheme.colors.isDark
+val language = langContext.resources.configuration.locales[0].language
+val isRtl = language == "fa" || language == "ar"
+
+/* ------------------------- DARK MODE DETECTION ------------------------- */
+val isDark = langContext.resources.configuration.uiMode and
+Configuration.UI_MODE_NIGHT_MASK == Configuration.UI_MODE_NIGHT_YES
 
 /* ------------------------- SELECT COLORS BASED ON MODE ------------------------- */
 val bgColor = if (isDark) darkBg else lightBg
@@ -81,7 +93,7 @@ horizontalAlignment = Alignment.CenterHorizontally
 if (snapshot != null) {
 
 val countdown = nextPrayerCountdown(snapshot.timings)
-val weekdayName = weekdayName(langContext.resources.configuration.locales[0].language)
+val weekdayName = weekdayName(language)
 val gregorianText = formatGregorian(langContext, snapshot.gregorianDateKey)
 val jalaliWithWeekday = "{snapshot.jalaliText}"
 
@@ -209,7 +221,7 @@ dateKey
 }
 
 private fun staticDuration(targetMillis: Long): String {
-val diff = (targetMillis - System.currentTimeMillis()).coerceAtLeast(0) / 1000
+val diff = (targetMillis - System.currentMillis()).coerceAtLeast(0) / 1000
 val h = diff / 3600
 val m = (diff % 3600) / 60
 val s = diff % 60
