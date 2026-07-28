@@ -13,18 +13,18 @@
 
     <string name="compass_locate_me">موقعیت فعلی من</string>
     <string name="compass_add_from_map">افزودن از نقشه</string>
-    <string name="compass_live_caption">گوشی را رو به جلو بگیرید تا فلش به سمت بالا بایستد</string>
+    <string name="compass_live_caption"></string>
     <string name="compass_static_caption">از شمال، در جهت عقربه‌های ساعت</string>
     <string name="compass_distance">فاصله تا کعبه: %1$d کیلومتر</string>
-    <string name="dir_n">ش</string>
-    <string name="dir_ne">ش‌ش</string>
-    <string name="dir_e">خ</string>
-    <string name="dir_se">ج‌ش</string>
-    <string name="dir_s">ج</string>
-    <string name="dir_sw">ج‌غ</string>
-    <string name="dir_w">غ</string>
-    <string name="dir_nw">ش‌غ</string>
-
+      <string name="dir_n">N</string>
+    <string name="dir_ne">NE</string>
+    <string name="dir_e">E</string>
+    <string name="dir_se">SE</string>
+    <string name="dir_s">S</string>
+    <string name="dir_sw">SW</string>
+    <string name="dir_w">W</string>
+    <string name="dir_nw">NW</string>
+    
     <string name="prayer_times_title">اوقات شرعی امروز</string>
     <string name="offline_approx_badge">آفلاین · تقریبی</string>
     <string name="approx_suffix"> (تقریبی)</string>
