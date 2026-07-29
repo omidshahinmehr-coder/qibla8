@@ -1,14 +1,19 @@
 package com.qibla.prayertimes.widget
 
 import android.content.Context
+import android.os.Build
+import android.os.SystemClock
+import android.widget.RemoteViews
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.glance.GlanceId
 import androidx.glance.GlanceModifier
+import androidx.glance.LocalContext
 import androidx.glance.action.actionStartActivity
 import androidx.glance.action.clickable
+import androidx.glance.appwidget.AndroidRemoteViews
 import androidx.glance.appwidget.GlanceAppWidget
 import androidx.glance.appwidget.cornerRadius
 import androidx.glance.appwidget.provideContent
@@ -67,6 +72,7 @@ class QiblaWidget : GlanceAppWidget() {
 private fun WidgetContent(langContext: Context, snapshot: WidgetSnapshot?) {
     val labels = prayerLabels(langContext)
     val language = langContext.resources.configuration.locales[0].language
+    val isRtl = language == "fa" || language == "ar"
 
     Column(
         modifier = GlanceModifier
@@ -75,64 +81,91 @@ private fun WidgetContent(langContext: Context, snapshot: WidgetSnapshot?) {
             .cornerRadius(20.dp)
             .padding(12.dp)
             .clickable(actionStartActivity<MainActivity>()),
-        horizontalAlignment = Alignment.Horizontal.CenterHorizontally
+            horizontalAlignment = Alignment.Horizontal.CenterHorizontally
     ) {
         if (snapshot != null) {
             val countdown = nextPrayerCountdown(snapshot.timings)
             val weekdayName = weekdayName(language)
             val gregorianText = formatGregorian(langContext, snapshot.gregorianDateKey)
             val jalaliWithWeekday = listOf(weekdayName, snapshot.jalaliText).filter { it.isNotBlank() }.joinToString(" ")
-            val clockText = SimpleDateFormat("HH:mm", Locale.US).format(Calendar.getInstance().time)
 
-            // Row 1: clock (updates each time the widget redraws — see the note in the reply
-            // about why this isn't a live per-second tick).
-            Text(
-                text = clockText,
-                style = TextStyle(color = goldText, fontSize = 26.sp, fontWeight = FontWeight.Bold, textAlign = TextAlign.Center)
-            )
-
-            Spacer(modifier = GlanceModifier.height(4.dp))
-
-            // Row 2: Jalali date with weekday
-            Text(
-                text = jalaliWithWeekday,
-                style = TextStyle(color = goldText, fontSize = 13.sp, fontWeight = FontWeight.Bold, textAlign = TextAlign.Center)
-            )
-
-            Spacer(modifier = GlanceModifier.height(3.dp))
-
-            // Row 3: Hijri date — Gregorian date
-            Text(
-                text = "${snapshot.hijriText} - $gregorianText",
-                style = TextStyle(color = faintGoldText, fontSize = 11.sp, textAlign = TextAlign.Center)
-            )
-
-            Spacer(modifier = GlanceModifier.height(6.dp))
-
-            // Row 4: countdown to the next prayer
-            if (countdown != null) {
-                Text(
-                    text = langContext.getString(R.string.widget_countdown_label, labels[countdown.first] ?: countdown.first, snapshot.cityName),
-                    style = TextStyle(color = goldText, fontSize = 11.sp, fontWeight = FontWeight.Bold, textAlign = TextAlign.Center)
-                )
-                Spacer(modifier = GlanceModifier.height(2.dp))
-                Text(
-                    text = staticDuration(countdown.second),
-                    style = TextStyle(color = goldText, fontSize = 15.sp, fontWeight = FontWeight.Bold, textAlign = TextAlign.Center)
-                )
+            val clockBlock: @Composable () -> Unit = {
+                AndroidRemoteViews(RemoteViews(langContext.packageName, R.layout.widget_clock))
             }
+            val countdownLabelBlock: @Composable () -> Unit = {
+                if (countdown != null) {
+                    Text(
+                        text = langContext.getString(R.string.widget_countdown_label, labels[countdown.first] ?: countdown.first, snapshot.cityName),
+                        style = TextStyle(color = goldText, fontSize = 14.sp, fontWeight = FontWeight.Bold, textAlign = TextAlign.Center),
+                        maxLines = 2
+                    )
+                }
+            }
+            val jalaliBlock: @Composable () -> Unit = {
+                Text(text = "$jalaliWithWeekday - ${snapshot.jalaliText}", style = TextStyle(color = goldText, fontSize = 14.sp, fontWeight = FontWeight.Bold, textAlign = TextAlign.Center), maxLines = 1)
+            }
+            val timerBlock: @Composable () -> Unit = {
+                if (countdown != null) {
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                        val nowElapsed = SystemClock.elapsedRealtime()
+                        val nowWall = System.currentTimeMillis()
+                        val base = nowElapsed + (countdown.second - nowWall)
+                        val rv = RemoteViews(langContext.packageName, R.layout.widget_countdown)
+                        rv.setChronometer(R.id.widget_countdown_view, base, null, true)
+                        AndroidRemoteViews(rv)
+                    } else {
+                        Text(
+                            text = staticDuration(countdown.second),
+                            style = TextStyle(color = goldText, fontSize = 15.sp, fontWeight = FontWeight.Bold,textAlign = TextAlign.Center)
+                        )
+                    }
+                }
+            }
+            //my line1 clock center/////////////
+            Row(modifier = GlanceModifier.fillMaxWidth(), verticalAlignment = Alignment.Vertical.CenterVertically) {
+                     clockBlock()
+            }
+            Spacer(modifier = GlanceModifier.height(2.dp))
+
+            //my line2//////////////////////////////// 
+           Row(modifier = GlanceModifier.fillMaxWidth(), verticalAlignment = Alignment.Vertical.CenterVertically) {
+                jalaliBlock()            
+            }
+            Spacer(modifier = GlanceModifier.height(2.dp))
+
+
+            //my line3/////////////////////////////////////
+  
+           Text(
+                text = "${snapshot.hijriText} - $gregorianText", style = TextStyle(color = faintGoldText, fontSize = 13.sp, textAlign = TextAlign.Center),
+                maxLines = 1
+            )
 
             if (snapshot.isOffline) {
                 Text(
                     text = langContext.getString(R.string.widget_offline_tag),
-                    style = TextStyle(color = faintGoldText, fontSize = 9.sp, textAlign = TextAlign.Center)
+                    style = TextStyle(color = faintGoldText, fontSize = 9.sp)
                 )
             }
-
+            Spacer(modifier = GlanceModifier.height(2.dp))
+            
+            //my line4
+            Row(modifier = GlanceModifier.fillMaxWidth(), verticalAlignment = Alignment.Vertical.CenterVertically) {
+                if (isRtl) {
+                    Column(modifier = GlanceModifier.width(150.dp)) { countdownLabelBlock() }
+                    Spacer(modifier = GlanceModifier.width(6.dp))
+                    timerBlock()
+                } else {
+                   timerBlock()
+                   Spacer(modifier = GlanceModifier.width(6.dp))
+                   Column(modifier = GlanceModifier.width(150.dp)) { countdownLabelBlock() }
+                }
+            }
             Spacer(modifier = GlanceModifier.height(8.dp))
 
-            // Row 5: prayer times
-            Row(modifier = GlanceModifier.fillMaxWidth(), horizontalAlignment = Alignment.Horizontal.CenterHorizontally) {
+ //line5 
+    
+            Row(modifier = GlanceModifier.fillMaxWidth()) {
                 widgetPrayerKeys.forEachIndexed { index, key ->
                     if (index > 0) Spacer(modifier = GlanceModifier.width(4.dp))
                     PrayerCell(label = labels[key] ?: key, time = snapshot.timings[key] ?: "--:--")
@@ -201,7 +234,8 @@ private fun staticDuration(targetMillis: Long): String {
     val diff = (targetMillis - System.currentTimeMillis()).coerceAtLeast(0) / 1000
     val h = diff / 3600
     val m = (diff % 3600) / 60
-    return "%02d:%02d".format(h, m)
+    val s = diff % 60
+    return "%02d:%02d:%02d".format(h, m, s)
 }
 
 /**
