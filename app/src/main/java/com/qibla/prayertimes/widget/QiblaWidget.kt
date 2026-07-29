@@ -97,12 +97,12 @@ private fun WidgetContent(langContext: Context, snapshot: WidgetSnapshot?) {
                     Text(
                         text = langContext.getString(R.string.widget_countdown_label, labels[countdown.first] ?: countdown.first, snapshot.cityName),
                         style = TextStyle(color = goldText, fontSize = 14.sp, fontWeight = FontWeight.Bold, textAlign = TextAlign.Center),
-                        maxLines = 2
+                        maxLines = 1
                     )
                 }
             }
             val jalaliBlock: @Composable () -> Unit = {
-                Text(text = "$jalaliWithWeekday - ${snapshot.jalaliText}", style = TextStyle(color = goldText, fontSize = 14.sp, fontWeight = FontWeight.Bold, textAlign = TextAlign.Center), maxLines = 1)
+                Text(text = jalaliWithWeekday, style = TextStyle(color = goldText, fontSize = 14.sp, fontWeight = FontWeight.Bold, textAlign = TextAlign.Center), maxLines = 1)
             }
             val timerBlock: @Composable () -> Unit = {
                 if (countdown != null) {
@@ -137,29 +137,29 @@ private fun WidgetContent(langContext: Context, snapshot: WidgetSnapshot?) {
             //my line3/////////////////////////////////////
   
            Text(
-                text = "${snapshot.hijriText} - $gregorianText", style = TextStyle(color = faintGoldText, fontSize = 13.sp, textAlign = TextAlign.Center),
+                text = "${snapshot.hijriText} - $gregorianText", style = TextStyle(color = faintGoldText, fontSize = 14.sp, textAlign = TextAlign.Center),
                 maxLines = 1
             )
 
             if (snapshot.isOffline) {
                 Text(
                     text = langContext.getString(R.string.widget_offline_tag),
-                    style = TextStyle(color = faintGoldText, fontSize = 9.sp)
+                    style = TextStyle(color = faintGoldText, fontSize = 9.sp, textAlign = TextAlign.Center)
                 )
             }
             Spacer(modifier = GlanceModifier.height(2.dp))
             
             //my line4
             Row(modifier = GlanceModifier.fillMaxWidth(), verticalAlignment = Alignment.Vertical.CenterVertically) {
-                if (isRtl) {
+               // if (isRtl) {
                     Column(modifier = GlanceModifier.width(150.dp)) { countdownLabelBlock() }
                     Spacer(modifier = GlanceModifier.width(6.dp))
                     timerBlock()
-                } else {
-                   timerBlock()
-                   Spacer(modifier = GlanceModifier.width(6.dp))
-                   Column(modifier = GlanceModifier.width(150.dp)) { countdownLabelBlock() }
-                }
+               // } else {
+                //   timerBlock()
+                //   Spacer(modifier = GlanceModifier.width(6.dp))
+                //   Column(modifier = GlanceModifier.width(150.dp)) { countdownLabelBlock() }
+              //  }
             }
             Spacer(modifier = GlanceModifier.height(8.dp))
 
@@ -224,7 +224,7 @@ private fun formatGregorian(context: Context, dateKey: String): String {
     return try {
         val parts = dateKey.split("-").map { it.toInt() }
         val cal = Calendar.getInstance().apply { set(parts[0], parts[1] - 1, parts[2]) }
-        SimpleDateFormat("d MMMM yyyy", context.resources.configuration.locales[0]).format(cal.time)
+        SimpleDateFormat("dd MMMM yyyy", context.resources.configuration.locales[0]).format(cal.time)
     } catch (e: Exception) {
         dateKey
     }
