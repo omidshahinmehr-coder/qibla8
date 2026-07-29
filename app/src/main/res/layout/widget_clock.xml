@@ -3,9 +3,9 @@
     android:id="@+id/widget_clock"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:format12Hour="h:mm"
-    android:format24Hour="HH:mm"
+    android:format12Hour="h:mm:ss"
+    android:format24Hour="HH:mm:ss"
     android:textColor="#8A6A2E"
-    android:textSize="26sp"
+    android:textSize="28sp"
     android:textStyle="bold"
     android:fontFamily="@font/entezar" />
