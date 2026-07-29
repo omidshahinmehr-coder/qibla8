@@ -101,7 +101,7 @@ private fun WidgetContent(langContext: Context, snapshot: WidgetSnapshot?) {
                 }
             }
             val jalaliBlock: @Composable () -> Unit = {
-                Text(text = "${jalaliWithWeekday} ${snapshot.jalaliText}, style = TextStyle(color = goldText, fontSize = 14.sp, fontWeight = FontWeight.Bold), maxLines = 1)
+                Text(text = "${jalaliWithWeekday} ${snapshot.jalaliText}", style = TextStyle(color = goldText, fontSize = 14.sp, fontWeight = FontWeight.Bold), maxLines = 1)
             }
             val timerBlock: @Composable () -> Unit = {
                 if (countdown != null) {
