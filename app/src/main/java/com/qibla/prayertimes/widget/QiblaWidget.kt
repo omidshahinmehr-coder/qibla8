@@ -95,13 +95,13 @@ private fun WidgetContent(langContext: Context, snapshot: WidgetSnapshot?) {
                 if (countdown != null) {
                     Text(
                         text = langContext.getString(R.string.widget_countdown_label, labels[countdown.first] ?: countdown.first, snapshot.cityName),
-                        style = TextStyle(color = goldText, fontSize = 11.sp, fontWeight = FontWeight.Bold, textAlign = TextAlign.End),
-                        maxLines = 2
+                        style = TextStyle(color = goldText, fontSize = 14.sp, fontWeight = FontWeight.Bold, textAlign = TextAlign.End),
+                        maxLines = 1
                     )
                 }
             }
             val jalaliBlock: @Composable () -> Unit = {
-                Text(text = jalaliWithWeekday, style = TextStyle(color = goldText, fontSize = 12.sp, fontWeight = FontWeight.Bold), maxLines = 1)
+                Text(text = "${jalaliWithWeekday} ${snapshot.jalaliText}, style = TextStyle(color = goldText, fontSize = 14.sp, fontWeight = FontWeight.Bold), maxLines = 1)
             }
             val timerBlock: @Composable () -> Unit = {
                 if (countdown != null) {
@@ -136,8 +136,7 @@ private fun WidgetContent(langContext: Context, snapshot: WidgetSnapshot?) {
             //my line3/////////////////////////////////////
   
            Text(
-                text = "${snapshot.hijriText} - $gregorianText",
-                style = TextStyle(color = faintGoldText, fontSize = 11.sp),
+                text = "${snapshot.hijriText} - $gregorianText", style = TextStyle(color = faintGoldText, fontSize = 13.sp),
                 maxLines = 1
             )
 
