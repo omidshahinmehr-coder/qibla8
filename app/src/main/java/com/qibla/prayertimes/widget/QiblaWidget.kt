@@ -120,37 +120,22 @@ private fun WidgetContent(langContext: Context, snapshot: WidgetSnapshot?) {
                     }
                 }
             }
-
-            // Line 1: clock + "time left until X, Y horizon" label
+            //my line1 clock center/////////////
             Row(modifier = GlanceModifier.fillMaxWidth(), verticalAlignment = Alignment.Vertical.CenterVertically) {
-                if (isRtl) {
-                    Column(modifier = GlanceModifier.width(150.dp)) { countdownLabelBlock() }
-                    Spacer(modifier = GlanceModifier.width(6.dp))
-                    clockBlock()
-                } else {
-                    clockBlock()
-                    Spacer(modifier = GlanceModifier.width(6.dp))
-                    Column(modifier = GlanceModifier.width(150.dp)) { countdownLabelBlock() }
-                }
+                     clockBlock()
             }
-
             Spacer(modifier = GlanceModifier.height(2.dp))
 
-            // Line 2: Jalali date + weekday, and the live HH:MM:SS timer
-            Row(modifier = GlanceModifier.fillMaxWidth(), verticalAlignment = Alignment.Vertical.CenterVertically) {
-                if (isRtl) {
-                    Column(modifier = GlanceModifier.width(150.dp)) { jalaliBlock() }
-                    timerBlock()
-                } else {
-                    timerBlock()
-                    Column(modifier = GlanceModifier.width(150.dp)) { jalaliBlock() }
-                }
+            //my line2//////////////////////////////// 
+           Row(modifier = GlanceModifier.fillMaxWidth(), verticalAlignment = Alignment.Vertical.CenterVertically) {
+                jalaliBlock()            
             }
-
             Spacer(modifier = GlanceModifier.height(2.dp))
 
-            // Line 3: Hijri date — Gregorian date
-            Text(
+
+            //my line3/////////////////////////////////////
+  
+           Text(
                 text = "${snapshot.hijriText} - $gregorianText",
                 style = TextStyle(color = faintGoldText, fontSize = 11.sp),
                 maxLines = 1
@@ -162,9 +147,24 @@ private fun WidgetContent(langContext: Context, snapshot: WidgetSnapshot?) {
                     style = TextStyle(color = faintGoldText, fontSize = 9.sp)
                 )
             }
-
+            Spacer(modifier = GlanceModifier.height(2.dp))
+            
+            //my line4
+            Row(modifier = GlanceModifier.fillMaxWidth(), verticalAlignment = Alignment.Vertical.CenterVertically) {
+                if (isRtl) {
+                    Column(modifier = GlanceModifier.width(150.dp)) { countdownLabelBlock() }
+                    Spacer(modifier = GlanceModifier.width(6.dp))
+                    timerBlock()
+                } else {
+                   timerBlock()
+                   Spacer(modifier = GlanceModifier.width(6.dp))
+                   Column(modifier = GlanceModifier.width(150.dp)) { countdownLabelBlock() }
+                }
+            }
             Spacer(modifier = GlanceModifier.height(8.dp))
 
+ //line5 
+    
             Row(modifier = GlanceModifier.fillMaxWidth()) {
                 widgetPrayerKeys.forEachIndexed { index, key ->
                     if (index > 0) Spacer(modifier = GlanceModifier.width(4.dp))
