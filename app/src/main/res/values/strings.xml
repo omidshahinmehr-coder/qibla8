@@ -148,7 +148,8 @@
     <string name="next_prayer_countdown">%1$s in %2$s</string>
     <string name="countdown_hours_minutes">%1$dh %2$dm</string>
     <string name="countdown_minutes">%1$dm</string>
-    <string name="widget_countdown_label">Time left until %1$s over %2$s horizon</string>
+    
+    <string name="widget_countdown_label">Time remaining until %1$s</string>
     <string name="col_sunrise">Sunrise</string>
     <string name="col_sunset">Sunset</string>
     <string name="menu_theme">Appearance</string>
