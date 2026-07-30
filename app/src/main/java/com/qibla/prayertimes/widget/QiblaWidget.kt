@@ -193,7 +193,7 @@ Box(
         timerBlock()
     }
 }
-            Spacer(modifier = GlanceModifier.height(8.dp))
+            Spacer(modifier = GlanceModifier.height(2.dp))
 
             // LINE 5 — PRAYER CELLS
             Row(modifier = GlanceModifier.fillMaxWidth()) {
