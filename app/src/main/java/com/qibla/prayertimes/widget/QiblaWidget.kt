@@ -176,30 +176,23 @@ private fun WidgetContent(langContext: Context, snapshot: WidgetSnapshot?) {
             Spacer(modifier = GlanceModifier.height(2.dp))
 
             // LINE 4 — COUNTDOWN (CENTERED)
-             Box(
+             
+Box(
     modifier = GlanceModifier.fillMaxWidth(),
     contentAlignment = Alignment.Center
 ) {
     Row(
-        modifier = GlanceModifier.fillMaxWidth(),
-        verticalAlignment = Alignment.Vertical.CenterVertically,
-        horizontalAlignment = Alignment.Horizontal.CenterHorizontally
+        verticalAlignment = Alignment.Vertical.CenterVertically
     ) {
-
-        // متن تا جایی که فضا هست کش می‌آید و وسط‌چین می‌ماند
-        Column(
-            modifier = GlanceModifier.defaultWeight(),
-            horizontalAlignment = Alignment.Horizontal.CenterHorizontally
-        ) {
-            countdownLabelBlock()
-        }
+        // لیبل شمارش معکوس
+        countdownLabelBlock()
 
         Spacer(modifier = GlanceModifier.width(6.dp))
 
+        // تایمر
         timerBlock()
     }
 }
-
             Spacer(modifier = GlanceModifier.height(8.dp))
 
             // LINE 5 — PRAYER CELLS
