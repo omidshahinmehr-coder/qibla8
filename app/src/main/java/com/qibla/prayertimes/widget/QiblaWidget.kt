@@ -130,7 +130,7 @@ private fun WidgetContent(langContext: Context, snapshot: WidgetSnapshot?) {
                 }
             }
 
-            // CLOCK + CITY (fixed version)
+            // CLOCK + CITY
             Row(
                 modifier = GlanceModifier.fillMaxWidth(),
                 verticalAlignment = Alignment.Vertical.CenterVertically
@@ -206,7 +206,7 @@ private fun WidgetContent(langContext: Context, snapshot: WidgetSnapshot?) {
                     .fillMaxWidth()
                     .height(1.dp)
                     .background(ColorProvider(Color(0x22B28A3A)))
-            )
+            ) { }
 
             Spacer(modifier = GlanceModifier.height(6.dp))
 
