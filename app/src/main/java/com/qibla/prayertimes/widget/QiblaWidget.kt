@@ -17,6 +17,11 @@ import androidx.glance.appwidget.GlanceAppWidget
 import androidx.glance.appwidget.cornerRadius
 import androidx.glance.appwidget.provideContent
 import androidx.glance.background
+import androidx.glance.material3.Icon
+import androidx.glance.material3.IconProvider
+
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.LocationOn
 import androidx.glance.layout.*
 import androidx.glance.text.*
 import androidx.glance.unit.ColorProvider
@@ -132,12 +137,45 @@ private fun WidgetContent(langContext: Context, snapshot: WidgetSnapshot?) {
             }
 
             // LINE 1 — CLOCK (CENTERED)
-            Box(
-                modifier = GlanceModifier.fillMaxWidth(),
-                contentAlignment = Alignment.Center
-            ) {
-                clockBlock()
-            }
+            Row(
+    modifier = GlanceModifier
+        .fillMaxWidth()
+        .padding(horizontal = 12.dp, vertical = 6.dp),
+    verticalAlignment = Alignment.Vertical.CenterVertically
+) {
+
+    // ساعت - سمت چپ
+    Box(
+        modifier = GlanceModifier.defaultWeight(),
+        contentAlignment = Alignment.CenterStart
+    ) {
+        timeBlock()
+    }
+
+    // آیکون مکان + نام شهر - سمت راست
+    Row(
+        verticalAlignment = Alignment.Vertical.CenterVertically
+    ) {
+        Icon(
+            imageProvider = IconProvider(Icons.Filled.LocationOn),
+            contentDescription = null,
+            modifier = GlanceModifier.size(16.dp),
+            tint = BrassLight
+        )
+
+        Spacer(GlanceModifier.width(6.dp))
+
+        Text(
+            text = snapshot.cityName,
+            style = TextStyle(
+                color = AmberText,
+                fontSize = 15.sp,
+                fontWeight = FontWeight.Bold
+            ),
+            maxLines = 1
+        )
+    }
+}
 
             Spacer(modifier = GlanceModifier.height(2.dp))
 
