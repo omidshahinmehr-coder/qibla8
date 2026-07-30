@@ -192,7 +192,7 @@ Box(
        
            // لیبل شمارش معکوس
         countdownLabelBlock()
-        》
+    }
 }
             Spacer(modifier = GlanceModifier.height(2.dp))
 
