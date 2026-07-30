@@ -122,13 +122,15 @@ private fun WidgetContent(langContext: Context, snapshot: WidgetSnapshot?) {
                 }
             }
             //my line1 clock center/////////////
-            Row(modifier = GlanceModifier.fillMaxWidth(), verticalAlignment = Alignment.Vertical.CenterVertically) {
+            Row(modifier = GlanceModifier.fillMaxWidth(), verticalAlignment = Alignment.Vertical.CenterVertically,
+             horizontalAlignment = Alignment.Horizontal.CenterHorizontally  ) {
                      clockBlock()
             }
+            
             Spacer(modifier = GlanceModifier.height(2.dp))
 
             //my line2//////////////////////////////// 
-           Row(modifier = GlanceModifier.fillMaxWidth(), verticalAlignment = Alignment.Vertical.CenterVertically) {
+           Row(modifier = GlanceModifier.fillMaxWidth(), verticalAlignment = Alignment.Vertical.CenterVertically,horizontalAlignment = Alignment.Horizontal.CenterHorizontally)   {
                 jalaliBlock()            
             }
             Spacer(modifier = GlanceModifier.height(2.dp))
@@ -150,7 +152,7 @@ private fun WidgetContent(langContext: Context, snapshot: WidgetSnapshot?) {
             Spacer(modifier = GlanceModifier.height(2.dp))
             
             //my line4
-            Row(modifier = GlanceModifier.fillMaxWidth(), verticalAlignment = Alignment.Vertical.CenterVertically) {
+            Row(modifier = GlanceModifier.fillMaxWidth(), verticalAlignment = Alignment.Vertical.CenterVertically,horizontalAlignment = Alignment.Horizontal.CenterHorizontally )  {
                // if (isRtl) {
                     Column(modifier = GlanceModifier.width(150.dp)) { countdownLabelBlock() }
                     Spacer(modifier = GlanceModifier.width(6.dp))
