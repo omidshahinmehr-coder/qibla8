@@ -33,7 +33,7 @@ class WidgetDataStore(context: Context) {
         // The Jalali (Persian solar) calendar is only meaningful to Persian-speaking users;
         // other languages show Gregorian + Hijri only.
        // val jalali = if (language == "fa") JalaliCalendar.today().toString() else ""
-      jalali =  JalaliCalendar.today().toString() 
+     val   jalali =  JalaliCalendar.today().toString() 
         val eraSuffix = appContext.getString(R.string.hijri_era_suffix)
         val hijriText = hijri?.let { "${it.day} ${it.monthName(appContext)} ${it.year}$eraSuffix" } ?: ""
 
