@@ -10,7 +10,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.glance.GlanceId
 import androidx.glance.GlanceModifier
-import androidx.glance.LocalContext
 import androidx.glance.action.actionStartActivity
 import androidx.glance.action.clickable
 import androidx.glance.appwidget.AndroidRemoteViews
@@ -85,9 +84,13 @@ private fun WidgetContent(langContext: Context, snapshot: WidgetSnapshot?) {
                             labels[countdown.first] ?: countdown.first,
                             snapshot.cityName
                         ),
-                        style = TextStyle(color = goldText, fontSize = 14.sp, fontWeight = FontWeight.Bold),
-                        maxLines = 1,
-                        textAlign = TextAlign.Center
+                        style = TextStyle(
+                            color = goldText,
+                            fontSize = 14.sp,
+                            fontWeight = FontWeight.Bold,
+                            textAlign = TextAlign.Center
+                        ),
+                        maxLines = 1
                     )
                 }
             }
@@ -95,9 +98,13 @@ private fun WidgetContent(langContext: Context, snapshot: WidgetSnapshot?) {
             val jalaliBlock: @Composable () -> Unit = {
                 Text(
                     text = jalaliWithWeekday,
-                    style = TextStyle(color = goldText, fontSize = 14.sp, fontWeight = FontWeight.Bold),
-                    maxLines = 1,
-                    textAlign = TextAlign.Center
+                    style = TextStyle(
+                        color = goldText,
+                        fontSize = 14.sp,
+                        fontWeight = FontWeight.Bold,
+                        textAlign = TextAlign.Center
+                    ),
+                    maxLines = 1
                 )
             }
 
@@ -113,16 +120,18 @@ private fun WidgetContent(langContext: Context, snapshot: WidgetSnapshot?) {
                     } else {
                         Text(
                             text = staticDuration(countdown.second),
-                            style = TextStyle(color = goldText, fontSize = 15.sp, fontWeight = FontWeight.Bold),
-                            textAlign = TextAlign.Center
+                            style = TextStyle(
+                                color = goldText,
+                                fontSize = 15.sp,
+                                fontWeight = FontWeight.Bold,
+                                textAlign = TextAlign.Center
+                            )
                         )
                     }
                 }
             }
 
-            // -------------------------
             // LINE 1 — CLOCK (CENTERED)
-            // -------------------------
             Box(
                 modifier = GlanceModifier.fillMaxWidth(),
                 contentAlignment = Alignment.Center
@@ -132,9 +141,7 @@ private fun WidgetContent(langContext: Context, snapshot: WidgetSnapshot?) {
 
             Spacer(modifier = GlanceModifier.height(2.dp))
 
-            // -------------------------
             // LINE 2 — JALALI (CENTERED)
-            // -------------------------
             Box(
                 modifier = GlanceModifier.fillMaxWidth(),
                 contentAlignment = Alignment.Center
@@ -144,29 +151,31 @@ private fun WidgetContent(langContext: Context, snapshot: WidgetSnapshot?) {
 
             Spacer(modifier = GlanceModifier.height(2.dp))
 
-            // -------------------------
             // LINE 3 — HIJRI + GREGORIAN
-            // -------------------------
             Text(
                 text = "${snapshot.hijriText} - $gregorianText",
-                style = TextStyle(color = faintGoldText, fontSize = 14.sp),
-                maxLines = 1,
-                textAlign = TextAlign.Center
+                style = TextStyle(
+                    color = faintGoldText,
+                    fontSize = 14.sp,
+                    textAlign = TextAlign.Center
+                ),
+                maxLines = 1
             )
 
             if (snapshot.isOffline) {
                 Text(
                     text = langContext.getString(R.string.widget_offline_tag),
-                    style = TextStyle(color = faintGoldText, fontSize = 9.sp),
-                    textAlign = TextAlign.Center
+                    style = TextStyle(
+                        color = faintGoldText,
+                        fontSize = 9.sp,
+                        textAlign = TextAlign.Center
+                    )
                 )
             }
 
             Spacer(modifier = GlanceModifier.height(2.dp))
 
-            // -------------------------
             // LINE 4 — COUNTDOWN (CENTERED)
-            // -------------------------
             Box(
                 modifier = GlanceModifier.fillMaxWidth(),
                 contentAlignment = Alignment.Center
@@ -180,9 +189,7 @@ private fun WidgetContent(langContext: Context, snapshot: WidgetSnapshot?) {
 
             Spacer(modifier = GlanceModifier.height(8.dp))
 
-            // -------------------------
             // LINE 5 — PRAYER CELLS
-            // -------------------------
             Row(modifier = GlanceModifier.fillMaxWidth()) {
                 widgetPrayerKeys.forEachIndexed { index, key ->
                     if (index > 0) Spacer(modifier = GlanceModifier.width(4.dp))
@@ -193,14 +200,20 @@ private fun WidgetContent(langContext: Context, snapshot: WidgetSnapshot?) {
         } else {
             Text(
                 text = langContext.getString(R.string.widget_updating),
-                style = TextStyle(color = goldText, fontSize = 13.sp),
-                textAlign = TextAlign.Center
+                style = TextStyle(
+                    color = goldText,
+                    fontSize = 13.sp,
+                    textAlign = TextAlign.Center
+                )
             )
             Spacer(modifier = GlanceModifier.height(6.dp))
             Text(
                 text = langContext.getString(R.string.widget_open_app_hint),
-                style = TextStyle(color = faintGoldText, fontSize = 11.sp),
-                textAlign = TextAlign.Center
+                style = TextStyle(
+                    color = faintGoldText,
+                    fontSize = 11.sp,
+                    textAlign = TextAlign.Center
+                )
             )
         }
     }
@@ -223,9 +236,25 @@ private fun PrayerCell(label: String, time: String) {
                 .padding(horizontal = 4.dp, vertical = 6.dp),
             horizontalAlignment = Alignment.Horizontal.CenterHorizontally
         ) {
-            Text(text = label, style = TextStyle(color = goldText, fontSize = 10.sp, fontWeight = FontWeight.Bold))
+            Text(
+                text = label,
+                style = TextStyle(
+                    color = goldText,
+                    fontSize = 10.sp,
+                    fontWeight = FontWeight.Bold,
+                    textAlign = TextAlign.Center
+                )
+            )
             Spacer(modifier = GlanceModifier.height(2.dp))
-            Text(text = time, style = TextStyle(color = goldText, fontSize = 14.sp, fontWeight = FontWeight.Bold))
+            Text(
+                text = time,
+                style = TextStyle(
+                    color = goldText,
+                    fontSize = 14.sp,
+                    fontWeight = FontWeight.Bold,
+                    textAlign = TextAlign.Center
+                )
+            )
         }
     }
 }
