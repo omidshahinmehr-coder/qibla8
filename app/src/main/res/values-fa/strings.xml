@@ -137,7 +137,7 @@
     <string name="next_prayer_countdown">%1$s تا %2$s</string>
     <string name="countdown_hours_minutes">%1$d ساعت و %2$d دقیقه</string>
     <string name="countdown_minutes">%1$d دقیقه</string>
-    <string name="widget_countdown_label">مانده تا %1$s به افق %2$s</string>
+    <string name="widget_countdown_label">زمان باقیمانده تا %1$s</string>
     <string name="col_sunrise">طلوع</string>
     <string name="col_sunset">غروب</string>
     <string name="menu_theme">ظاهر برنامه</string>
