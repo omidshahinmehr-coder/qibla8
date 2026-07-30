@@ -18,19 +18,8 @@ import androidx.glance.appwidget.GlanceAppWidget
 import androidx.glance.appwidget.cornerRadius
 import androidx.glance.appwidget.provideContent
 import androidx.glance.background
-import androidx.glance.layout.Alignment
-import androidx.glance.layout.Column
-import androidx.glance.layout.Row
-import androidx.glance.layout.Spacer
-import androidx.glance.layout.fillMaxSize
-import androidx.glance.layout.fillMaxWidth
-import androidx.glance.layout.height
-import androidx.glance.layout.padding
-import androidx.glance.layout.width
-import androidx.glance.text.FontWeight
-import androidx.glance.text.Text
-import androidx.glance.text.TextAlign
-import androidx.glance.text.TextStyle
+import androidx.glance.layout.*
+import androidx.glance.text.*
 import androidx.glance.unit.ColorProvider
 import com.qibla.prayertimes.MainActivity
 import com.qibla.prayertimes.R
@@ -39,17 +28,14 @@ import com.qibla.prayertimes.data.WidgetSnapshot
 import com.qibla.prayertimes.data.prayerLabels
 import com.qibla.prayertimes.util.LocalePrefs
 import java.text.SimpleDateFormat
-import java.util.Calendar
-import java.util.Locale
+import java.util.*
 
-// Light cream / antique-gold palette, matching the requested widget design.
 private val bgColor = ColorProvider(Color(0xFFF3ECDD))
 private val cellBorderColor = ColorProvider(Color(0xFFD9C8A0))
 private val cellFillColor = ColorProvider(Color(0xFFFBF6EA))
 private val goldText = ColorProvider(Color(0xFF8A6A2E))
 private val faintGoldText = ColorProvider(Color(0xFFAD8F55))
 
-// Same six as the home screen — no Asr, no Isha.
 private val widgetPrayerKeys = listOf("Fajr", "Sunrise", "Dhuhr", "Sunset", "Maghrib", "Midnight")
 private val cellWidth = 66.dp
 
@@ -58,8 +44,6 @@ private val WEEKDAYS_AR = arrayOf("الأحد", "الاثنين", "الثلاث�
 
 class QiblaWidget : GlanceAppWidget() {
     override suspend fun provideGlance(context: Context, id: GlanceId) {
-        // Follow the app's own language override (not just the system language), the same way
-        // MainActivity does — a plain Glance context otherwise ignores that in-app choice.
         val localizedContext = LocalePrefs.wrap(context)
         val snapshot = WidgetDataStore(context).load()
         provideContent {
@@ -72,7 +56,6 @@ class QiblaWidget : GlanceAppWidget() {
 private fun WidgetContent(langContext: Context, snapshot: WidgetSnapshot?) {
     val labels = prayerLabels(langContext)
     val language = langContext.resources.configuration.locales[0].language
-    val isRtl = language == "fa" || language == "ar"
 
     Column(
         modifier = GlanceModifier
@@ -81,9 +64,10 @@ private fun WidgetContent(langContext: Context, snapshot: WidgetSnapshot?) {
             .cornerRadius(20.dp)
             .padding(12.dp)
             .clickable(actionStartActivity<MainActivity>()),
-            horizontalAlignment = Alignment.Horizontal.CenterHorizontally
+        horizontalAlignment = Alignment.Horizontal.CenterHorizontally
     ) {
         if (snapshot != null) {
+
             val countdown = nextPrayerCountdown(snapshot.timings)
             val weekdayName = weekdayName(language)
             val gregorianText = formatGregorian(langContext, snapshot.gregorianDateKey)
@@ -92,18 +76,31 @@ private fun WidgetContent(langContext: Context, snapshot: WidgetSnapshot?) {
             val clockBlock: @Composable () -> Unit = {
                 AndroidRemoteViews(RemoteViews(langContext.packageName, R.layout.widget_clock))
             }
+
             val countdownLabelBlock: @Composable () -> Unit = {
                 if (countdown != null) {
                     Text(
-                        text = langContext.getString(R.string.widget_countdown_label, labels[countdown.first] ?: countdown.first, snapshot.cityName),
-                        style = TextStyle(color = goldText, fontSize = 14.sp, fontWeight = FontWeight.Bold, textAlign = TextAlign.Center),
-                        maxLines = 1
+                        text = langContext.getString(
+                            R.string.widget_countdown_label,
+                            labels[countdown.first] ?: countdown.first,
+                            snapshot.cityName
+                        ),
+                        style = TextStyle(color = goldText, fontSize = 14.sp, fontWeight = FontWeight.Bold),
+                        maxLines = 1,
+                        textAlign = TextAlign.Center
                     )
                 }
             }
+
             val jalaliBlock: @Composable () -> Unit = {
-                Text(text = jalaliWithWeekday, style = TextStyle(color = goldText, fontSize = 14.sp, fontWeight = FontWeight.Bold, textAlign = TextAlign.Center), maxLines = 1)
+                Text(
+                    text = jalaliWithWeekday,
+                    style = TextStyle(color = goldText, fontSize = 14.sp, fontWeight = FontWeight.Bold),
+                    maxLines = 1,
+                    textAlign = TextAlign.Center
+                )
             }
+
             val timerBlock: @Composable () -> Unit = {
                 if (countdown != null) {
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
@@ -116,72 +113,94 @@ private fun WidgetContent(langContext: Context, snapshot: WidgetSnapshot?) {
                     } else {
                         Text(
                             text = staticDuration(countdown.second),
-                            style = TextStyle(color = goldText, fontSize = 15.sp, fontWeight = FontWeight.Bold,textAlign = TextAlign.Center)
+                            style = TextStyle(color = goldText, fontSize = 15.sp, fontWeight = FontWeight.Bold),
+                            textAlign = TextAlign.Center
                         )
                     }
                 }
             }
-            //my line1 clock center/////////////
-            Row(modifier = GlanceModifier.fillMaxWidth(), verticalAlignment = Alignment.Vertical.CenterVertically,
-             horizontalAlignment = Alignment.Horizontal.CenterHorizontally  ) {
-                     clockBlock()
+
+            // -------------------------
+            // LINE 1 — CLOCK (CENTERED)
+            // -------------------------
+            Box(
+                modifier = GlanceModifier.fillMaxWidth(),
+                contentAlignment = Alignment.Center
+            ) {
+                clockBlock()
             }
-            
+
             Spacer(modifier = GlanceModifier.height(2.dp))
 
-            //my line2//////////////////////////////// 
-           Row(modifier = GlanceModifier.fillMaxWidth(), verticalAlignment = Alignment.Vertical.CenterVertically,horizontalAlignment = Alignment.Horizontal.CenterHorizontally)   {
-                jalaliBlock()            
+            // -------------------------
+            // LINE 2 — JALALI (CENTERED)
+            // -------------------------
+            Box(
+                modifier = GlanceModifier.fillMaxWidth(),
+                contentAlignment = Alignment.Center
+            ) {
+                jalaliBlock()
             }
+
             Spacer(modifier = GlanceModifier.height(2.dp))
 
-
-            //my line3/////////////////////////////////////
-  
-           Text(
-                text = "${snapshot.hijriText} - $gregorianText", style = TextStyle(color = faintGoldText, fontSize = 14.sp, textAlign = TextAlign.Center),
-                maxLines = 1
+            // -------------------------
+            // LINE 3 — HIJRI + GREGORIAN
+            // -------------------------
+            Text(
+                text = "${snapshot.hijriText} - $gregorianText",
+                style = TextStyle(color = faintGoldText, fontSize = 14.sp),
+                maxLines = 1,
+                textAlign = TextAlign.Center
             )
 
             if (snapshot.isOffline) {
                 Text(
                     text = langContext.getString(R.string.widget_offline_tag),
-                    style = TextStyle(color = faintGoldText, fontSize = 9.sp, textAlign = TextAlign.Center)
+                    style = TextStyle(color = faintGoldText, fontSize = 9.sp),
+                    textAlign = TextAlign.Center
                 )
             }
+
             Spacer(modifier = GlanceModifier.height(2.dp))
-            
-            //my line4
-            Row(modifier = GlanceModifier.fillMaxWidth(), verticalAlignment = Alignment.Vertical.CenterVertically,horizontalAlignment = Alignment.Horizontal.CenterHorizontally )  {
-               // if (isRtl) {
+
+            // -------------------------
+            // LINE 4 — COUNTDOWN (CENTERED)
+            // -------------------------
+            Box(
+                modifier = GlanceModifier.fillMaxWidth(),
+                contentAlignment = Alignment.Center
+            ) {
+                Row {
                     Column(modifier = GlanceModifier.width(150.dp)) { countdownLabelBlock() }
                     Spacer(modifier = GlanceModifier.width(6.dp))
                     timerBlock()
-               // } else {
-                //   timerBlock()
-                //   Spacer(modifier = GlanceModifier.width(6.dp))
-                //   Column(modifier = GlanceModifier.width(150.dp)) { countdownLabelBlock() }
-              //  }
+                }
             }
+
             Spacer(modifier = GlanceModifier.height(8.dp))
 
- //line5 
-    
+            // -------------------------
+            // LINE 5 — PRAYER CELLS
+            // -------------------------
             Row(modifier = GlanceModifier.fillMaxWidth()) {
                 widgetPrayerKeys.forEachIndexed { index, key ->
                     if (index > 0) Spacer(modifier = GlanceModifier.width(4.dp))
                     PrayerCell(label = labels[key] ?: key, time = snapshot.timings[key] ?: "--:--")
                 }
             }
+
         } else {
             Text(
                 text = langContext.getString(R.string.widget_updating),
-                style = TextStyle(color = goldText, fontSize = 13.sp, textAlign = TextAlign.Center)
+                style = TextStyle(color = goldText, fontSize = 13.sp),
+                textAlign = TextAlign.Center
             )
             Spacer(modifier = GlanceModifier.height(6.dp))
             Text(
                 text = langContext.getString(R.string.widget_open_app_hint),
-                style = TextStyle(color = faintGoldText, fontSize = 11.sp, textAlign = TextAlign.Center)
+                style = TextStyle(color = faintGoldText, fontSize = 11.sp),
+                textAlign = TextAlign.Center
             )
         }
     }
@@ -189,8 +208,6 @@ private fun WidgetContent(langContext: Context, snapshot: WidgetSnapshot?) {
 
 @Composable
 private fun PrayerCell(label: String, time: String) {
-    // A thin "border" is faked with two nested rounded boxes, since Glance has no border()
-    // modifier of its own.
     Column(
         modifier = GlanceModifier
             .width(cellWidth)
@@ -214,7 +231,7 @@ private fun PrayerCell(label: String, time: String) {
 }
 
 private fun weekdayName(language: String): String {
-    val dow = Calendar.getInstance().get(Calendar.DAY_OF_WEEK) // 1=Sunday..7=Saturday
+    val dow = Calendar.getInstance().get(Calendar.DAY_OF_WEEK)
     return when (language) {
         "fa" -> WEEKDAYS_FA[dow - 1]
         "ar" -> WEEKDAYS_AR[dow - 1]
@@ -240,12 +257,6 @@ private fun staticDuration(targetMillis: Long): String {
     return "%02d:%02d:%02d".format(h, m, s)
 }
 
-/**
- * Finds the next of the five canonical prayers (Fajr/Dhuhr/Asr/Maghrib/Isha) from now.
- * Returns (prayerKey, targetEpochMillis). If every one of today's times has already passed,
- * falls back to today's Fajr time again as a same-time-tomorrow approximation (Fajr barely
- * shifts day to day), rather than showing nothing.
- */
 private fun nextPrayerCountdown(timings: Map<String, String>): Pair<String, Long>? {
     val order = listOf("Fajr", "Dhuhr", "Asr", "Maghrib", "Isha")
     val now = Calendar.getInstance()
