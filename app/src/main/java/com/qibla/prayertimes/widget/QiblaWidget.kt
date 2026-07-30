@@ -29,8 +29,7 @@ import com.qibla.prayertimes.util.LocalePrefs
 import java.text.SimpleDateFormat
 import java.util.*
 
-private val bgColor = ColorProvider(Color(0xFFFDF8F0))          // پس‌زمینه نرم‌تر
-private val cellBorderColor = ColorProvider(Color(0xFFE3D3AF))
+private val bgColor = ColorProvider(Color(0xFFFDF8F0))
 private val cellFillColor = ColorProvider(Color(0xFFFBF6EA))
 private val goldText = ColorProvider(Color(0xFF8A6A2E))
 private val faintGoldText = ColorProvider(Color(0xFFAD8F55))
@@ -131,33 +130,37 @@ private fun WidgetContent(langContext: Context, snapshot: WidgetSnapshot?) {
                 }
             }
 
-            // LINE 1 — CLOCK + CITY (مرتب و شیک)
+            // CLOCK + CITY (fixed version)
             Row(
                 modifier = GlanceModifier.fillMaxWidth(),
-                horizontalAlignment = Alignment.Horizontal.SpaceBetween,
                 verticalAlignment = Alignment.Vertical.CenterVertically
             ) {
                 Box(
+                    modifier = GlanceModifier.defaultWeight(),
                     contentAlignment = Alignment.CenterStart
                 ) {
                     clockBlock()
                 }
 
-                Text(
-                    text = snapshot.cityName,
-                    style = TextStyle(
-                        color = goldText,
-                        fontSize = 16.sp,
-                        fontWeight = FontWeight.Bold,
-                        textAlign = TextAlign.End
-                    ),
-                    maxLines = 1
-                )
+                Box(
+                    modifier = GlanceModifier.defaultWeight(),
+                    contentAlignment = Alignment.CenterEnd
+                ) {
+                    Text(
+                        text = snapshot.cityName,
+                        style = TextStyle(
+                            color = goldText,
+                            fontSize = 16.sp,
+                            fontWeight = FontWeight.Bold
+                        ),
+                        maxLines = 1
+                    )
+                }
             }
 
             Spacer(modifier = GlanceModifier.height(6.dp))
 
-            // LINE 2 — JALALI (CENTERED)
+            // JALALI
             Box(
                 modifier = GlanceModifier.fillMaxWidth(),
                 contentAlignment = Alignment.Center
@@ -167,7 +170,7 @@ private fun WidgetContent(langContext: Context, snapshot: WidgetSnapshot?) {
 
             Spacer(modifier = GlanceModifier.height(4.dp))
 
-            // LINE 3 — HIJRI + GREGORIAN
+            // HIJRI + GREGORIAN
             Column(
                 modifier = GlanceModifier.fillMaxWidth(),
                 horizontalAlignment = Alignment.Horizontal.CenterHorizontally
@@ -197,7 +200,7 @@ private fun WidgetContent(langContext: Context, snapshot: WidgetSnapshot?) {
 
             Spacer(modifier = GlanceModifier.height(6.dp))
 
-            // Divider ظریف
+            // Divider
             Box(
                 modifier = GlanceModifier
                     .fillMaxWidth()
@@ -207,7 +210,7 @@ private fun WidgetContent(langContext: Context, snapshot: WidgetSnapshot?) {
 
             Spacer(modifier = GlanceModifier.height(6.dp))
 
-            // LINE 4 — COUNTDOWN (CENTERED)
+            // COUNTDOWN
             Row(
                 modifier = GlanceModifier.fillMaxWidth(),
                 horizontalAlignment = Alignment.Horizontal.CenterHorizontally,
@@ -220,7 +223,7 @@ private fun WidgetContent(langContext: Context, snapshot: WidgetSnapshot?) {
 
             Spacer(modifier = GlanceModifier.height(8.dp))
 
-            // LINE 5 — PRAYER CELLS
+            // PRAYER CELLS
             Row(
                 modifier = GlanceModifier.fillMaxWidth(),
                 horizontalAlignment = Alignment.Horizontal.CenterHorizontally
