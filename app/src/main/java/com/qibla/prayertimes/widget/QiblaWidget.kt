@@ -184,14 +184,15 @@ Box(
     Row(
         verticalAlignment = Alignment.Vertical.CenterVertically
     ) {
-        // لیبل شمارش معکوس
-        countdownLabelBlock()
-
+ 
+ // تایمر
+        timerBlock()
         Spacer(modifier = GlanceModifier.width(6.dp))
 
-        // تایمر
-        timerBlock()
-    }
+       
+           // لیبل شمارش معکوس
+        countdownLabelBlock()
+        》
 }
             Spacer(modifier = GlanceModifier.height(2.dp))
 
