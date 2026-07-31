@@ -17,6 +17,7 @@ import androidx.glance.appwidget.GlanceAppWidget
 import androidx.glance.appwidget.cornerRadius
 import androidx.glance.appwidget.provideContent
 import androidx.glance.background
+import androidx.glance.layout.defaultWeight
 import androidx.glance.layout.*
 import androidx.glance.text.*
 import androidx.glance.unit.ColorProvider
@@ -210,11 +211,22 @@ countdownLabelBlock()
 Spacer(modifier = GlanceModifier.height(2.dp))
 
 // LINE 5 — PRAYER CELLS
-Row(modifier = GlanceModifier.fillMaxWidth(),horizontalAlignment = Alignment.Horizontal.CenterHorizontally) {
-widgetPrayerKeys.forEachIndexed { index, key ->
-if (index > 0) Spacer(modifier = GlanceModifier.width(4.dp))
-PrayerCell(label = labels[key] ?: key, time = snapshot.timings[key] ?: "--:--")
-}
+Row(
+    modifier = GlanceModifier.fillMaxWidth(),
+    horizontalAlignment = Alignment.Horizontal.CenterHorizontally
+) {
+    widgetPrayerKeys.forEachIndexed { index, key ->
+        if (index > 0) Spacer(modifier = GlanceModifier.width(4.dp))
+
+        Box(
+            modifier = GlanceModifier.defaultWeight()
+        ) {
+            PrayerCell(
+                label = labels[key] ?: key,
+                time = snapshot.timings[key] ?: "--:--"
+            )
+        }
+    }
 }
 
 } else {
@@ -243,7 +255,6 @@ textAlign = TextAlign.Center
 private fun PrayerCell(label: String, time: String) {
     Column(
         modifier = GlanceModifier
-            .defaultWeight()   // ← این باعث می‌شود سلول‌ها کل عرض را تقسیم کنند
             .background(cellBorderColor)
             .cornerRadius(16.dp)
             .padding(1.2.dp)
