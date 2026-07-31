@@ -3,9 +3,6 @@ package com.qibla.prayertimes.ui
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
@@ -22,7 +19,6 @@ private object Routes {
     const val LANGUAGE = "language"
     const val THEME = "theme"
     const val CITY_PICKER = "city_picker"
-    const val MAP_PICKER = "map_picker"
 }
 
 @Composable
@@ -32,10 +28,6 @@ fun QiblaNavHost(navController: NavHostController = rememberNavController()) {
     val viewModel: QiblaViewModel = viewModel(
         viewModelStoreOwner = androidx.compose.ui.platform.LocalContext.current as androidx.activity.ComponentActivity
     )
-
-    // Simple hand-off for the map picker's result — plain Compose state at the NavHost's own
-    // scope survives navigating to/from the map screen since the NavHost itself isn't recreated.
-    var pendingMapResult by remember { mutableStateOf<Pair<Double, Double>?>(null) }
 
     NavHost(navController = navController, startDestination = Routes.HOME) {
         composable(Routes.HOME) {
@@ -80,19 +72,7 @@ fun QiblaNavHost(navController: NavHostController = rememberNavController()) {
                 onSelect = { viewModel.selectCity(it) },
                 onAddCity = { viewModel.addCustomCity(it) },
                 onRemoveCustom = { viewModel.removeCustomCity(it) },
-                onBack = { navController.popBackStack() },
-                onOpenMap = { navController.navigate(Routes.MAP_PICKER) },
-                pendingMapResult = pendingMapResult,
-                onConsumeMapResult = { pendingMapResult = null }
-            )
-        }
-        composable(Routes.MAP_PICKER) {
-            MapPickerScreen(
-                onBack = { navController.popBackStack() },
-                onPicked = { lat, lon ->
-                    pendingMapResult = lat to lon
-                    navController.popBackStack()
-                }
+                onBack = { navController.popBackStack() }
             )
         }
     }
