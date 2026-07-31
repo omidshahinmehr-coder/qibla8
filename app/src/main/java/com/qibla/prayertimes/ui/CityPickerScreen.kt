@@ -1,8 +1,5 @@
 package com.qibla.prayertimes.ui
 
-import android.app.Activity
-import androidx.activity.compose.rememberLauncherForActivityResult
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -36,7 +33,6 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
-import com.qibla.prayertimes.MapPickerActivity
 import com.qibla.prayertimes.R
 import com.qibla.prayertimes.data.GeocodeResult
 import com.qibla.prayertimes.data.GeocodingSearch
@@ -54,7 +50,10 @@ fun CityPickerScreen(
     onSelect: (City) -> Unit,
     onAddCity: (City) -> Unit,
     onRemoveCustom: (City) -> Unit,
-    onBack: () -> Unit
+    onBack: () -> Unit,
+    onOpenMap: () -> Unit,
+    pendingMapResult: Pair<Double, Double>?,
+    onConsumeMapResult: () -> Unit
 ) {
     val context = LocalContext.current
     val scope = rememberCoroutineScope()
@@ -69,18 +68,11 @@ fun CityPickerScreen(
     var pendingNamePrompt by remember { mutableStateOf<Pair<Double, Double>?>(null) }
     var showManualDialog by remember { mutableStateOf(false) }
 
-    // Launches the real (non-Compose) MapPickerActivity and receives the picked coordinates
-    // back as an activity result — see MapPickerActivity.kt for why this is a plain Activity
-    // rather than a Compose screen with an embedded WebView.
-    val mapLauncher = rememberLauncherForActivityResult(
-        ActivityResultContracts.StartActivityForResult()
-    ) { result ->
-        if (result.resultCode == Activity.RESULT_OK) {
-            val lat = result.data?.getDoubleExtra(MapPickerActivity.EXTRA_PICKED_LAT, Double.NaN) ?: Double.NaN
-            val lng = result.data?.getDoubleExtra(MapPickerActivity.EXTRA_PICKED_LNG, Double.NaN) ?: Double.NaN
-            if (!lat.isNaN() && !lng.isNaN()) {
-                pendingNamePrompt = lat to lng
-            }
+    // A location was just picked on the full-screen map: ask the user to name it.
+    LaunchedEffect(pendingMapResult) {
+        if (pendingMapResult != null) {
+            pendingNamePrompt = pendingMapResult
+            onConsumeMapResult()
         }
     }
 
@@ -133,14 +125,9 @@ fun CityPickerScreen(
                 MethodChip(
                     icon = Icons.Filled.Map,
                     label = stringResource(R.string.city_choose_from_map),
-                    modifier = Modifier.weight(1f)
-                ) {
-                    val intent = android.content.Intent(context, MapPickerActivity::class.java).apply {
-                        putExtra(MapPickerActivity.EXTRA_INITIAL_LAT, selected.lat)
-                        putExtra(MapPickerActivity.EXTRA_INITIAL_LNG, selected.lon)
-                    }
-                    mapLauncher.launch(intent)
-                }
+                    modifier = Modifier.weight(1f),
+                    onClick = onOpenMap
+                )
                 MethodChip(
                     icon = Icons.Filled.EditLocationAlt,
                     label = stringResource(R.string.city_manual_entry),
