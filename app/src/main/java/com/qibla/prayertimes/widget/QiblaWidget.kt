@@ -17,7 +17,6 @@ import androidx.glance.appwidget.GlanceAppWidget
 import androidx.glance.appwidget.cornerRadius
 import androidx.glance.appwidget.provideContent
 import androidx.glance.background
-import androidx.glance.layout.defaultWeight
 import androidx.glance.layout.*
 import androidx.glance.text.*
 import androidx.glance.unit.ColorProvider
@@ -211,22 +210,11 @@ countdownLabelBlock()
 Spacer(modifier = GlanceModifier.height(2.dp))
 
 // LINE 5 — PRAYER CELLS
-Row(
-    modifier = GlanceModifier.fillMaxWidth(),
-    horizontalAlignment = Alignment.Horizontal.CenterHorizontally
-) {
-    widgetPrayerKeys.forEachIndexed { index, key ->
-        if (index > 0) Spacer(modifier = GlanceModifier.width(4.dp))
-
-        Box(
-            modifier = GlanceModifier.defaultWeight()
-        ) {
-            PrayerCell(
-                label = labels[key] ?: key,
-                time = snapshot.timings[key] ?: "--:--"
-            )
-        }
-    }
+Row(modifier = GlanceModifier.fillMaxWidth(),horizontalAlignment = Alignment.Horizontal.CenterHorizontally) {
+widgetPrayerKeys.forEachIndexed { index, key ->
+if (index > 0) Spacer(modifier = GlanceModifier.width(4.dp))
+PrayerCell(label = labels[key] ?: key, time = snapshot.timings[key] ?: "--:--")
+}
 }
 
 } else {
@@ -253,42 +241,44 @@ textAlign = TextAlign.Center
 
 @Composable
 private fun PrayerCell(label: String, time: String) {
-    Column(
-        modifier = GlanceModifier
-            .background(cellBorderColor)
-            .cornerRadius(16.dp)
-            .padding(1.2.dp)
-    ) {
-        Column(
-            modifier = GlanceModifier
-                .fillMaxWidth()
-                .background(cellFillColor)
-                .cornerRadius(15.dp)
-                .padding(horizontal = 4.dp, vertical = 6.dp),
-            horizontalAlignment = Alignment.Horizontal.CenterHorizontally
-        ) {
-            Text(
-                text = label,
-                style = TextStyle(
-                    color = goldText,
-                    fontSize = 10.sp,
-                    fontWeight = FontWeight.Bold,
-                    textAlign = TextAlign.Center
-                )
-            )
-            Spacer(modifier = GlanceModifier.height(2.dp))
-            Text(
-                text = time,
-                style = TextStyle(
-                    color = goldText,
-                    fontSize = 14.sp,
-                    fontWeight = FontWeight.Bold,
-                    textAlign = TextAlign.Center
-                )
-            )
-        }
-    }
+Column(
+modifier = GlanceModifier
+.width(cellWidth)
+.background(cellBorderColor)
+.cornerRadius(16.dp)
+.padding(1.2.dp)
+) {
+Column(
+modifier = GlanceModifier
+.fillMaxWidth()
+.background(cellFillColor)
+.cornerRadius(15.dp)
+.padding(horizontal = 4.dp, vertical = 6.dp),
+horizontalAlignment = Alignment.Horizontal.CenterHorizontally
+) {
+Text(
+text = label,
+style = TextStyle(
+color = goldText,
+fontSize = 10.sp,
+fontWeight = FontWeight.Bold,
+textAlign = TextAlign.Center
+)
+)
+Spacer(modifier = GlanceModifier.height(2.dp))
+Text(
+text = time,
+style = TextStyle(
+color = goldText,
+fontSize = 14.sp,
+fontWeight = FontWeight.Bold,
+textAlign = TextAlign.Center
+)
+)
 }
+}
+}
+
 private fun weekdayName(language: String): String {
 val dow = Calendar.getInstance().get(Calendar.DAY_OF_WEEK)
 return when (language) {
