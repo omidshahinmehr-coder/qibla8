@@ -73,18 +73,20 @@
             updateLabel(lat, lng);
         }
 
+        // Tap anywhere on the map to move the pin there.
         map.on('click', function (e) {
             moveMarkerTo(e.latlng.lat, e.latlng.lng);
         });
 
+        // Dragging the pin itself also updates the coordinates.
         marker.on('dragend', function () {
             var pos = marker.getLatLng();
             moveMarkerTo(pos.lat, pos.lng);
         });
 
-        // Called from Android once the current/selected-city location is known.
+        // Called from Android once the current/initial location is known.
         function setInitialLocation(lat, lng) {
-            map.setView([lat, lng], 12);
+            map.setView([lat, lng], 16);
             moveMarkerTo(lat, lng);
         }
 
